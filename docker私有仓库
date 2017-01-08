@@ -1,0 +1,31 @@
+创建仓库，并运行守护进程(v2)：
+http模式
+# docker run -d --restart=always -p 5000:5000 -v /home/wyu4/docker/registry:/tmp/registry --name local-registry registry 
+
+查看：curl http://docker:5000/v2/_catalog
+仓库查看帮助：https://docs.docker.com/registry/spec/api/#/deleting-an-image
+https模式
+1. 创建证书
+# openssl req -x509 -nodes -newkey rsa:2048 -keyout /home/wyu4/docker/registry/certs/domain.key -out /home/wyu4/docker/registry/certs/domain.crt
+2. 创建能访问仓库的用户名和密码
+需要安装http-tools，在ubuntu上是apache2-utils，即提供htpasswd命令
+# htpasswd -c /home/wyu4/docker/registry/auth/docker_htpasswd username
+只有创建第一个用户需要选项-c
+2. 使用docker-compose来创建，建立docker-compose.yml文件
+registry:
+  restart: always
+  image: registry:2
+  ports:
+    - 5000:5000
+  environment:
+    REGISTRY_HTTP_TLS_CERTIFICATE: /certs/domain.crt
+    REGISTRY_HTTP_TLS_KEY: /certs/domain.key
+    REGISTRY_AUTH: htpasswd
+    REGISTRY_AUTH_HTPASSWD_PATH: /auth/docker_htpasswd
+    REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+  volumes:
+    - /home/wyu4/docker/registry/data:/var/lib/registry
+    - /home/wyu4/docker/registry/certs:/certs
+    - /home/wyu4/docker/registry/auth:/auth
+
+

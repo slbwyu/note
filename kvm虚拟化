@@ -1,0 +1,14 @@
+install kvm on Ubuntu 16.04 
+1. install kvm
+# sudo apt-get install qemu-kvm libvirt-bin virtinst bridge-utils cpu-checker libvirt0 virt-manager
+
+2. verify kvm installation
+
+# kvm-ok
+
+3. Configure briged networking
+
+# 可以使用默认
+
+4. create your first virtual machine
+

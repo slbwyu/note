@@ -1,0 +1,4 @@
+1. 单个容器
+	可以使用：# docker run --restart=always .....  
+2. 多容器开发环境
+	可以使用systemd来实现，结合docker-compose创建启动服务
